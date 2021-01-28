@@ -32,15 +32,15 @@ router.get("/", (req, res) => {
     res.json({ message: "test tweets index" });
 });
 
-const validateTweet = [ 
-    check('message') 
+const validateTweet = [
+    check('message')
     .exists({ checkFalsy: true })
     .withMessage("Tweet is empty, please try again!")
     .isLength({ max: 280 })
     .withMessage("This tweet is long!!!")
  ]
 
- 
+
  const handleValidationErrors = (req, res, next) => {
      const validationErrors = validationResult(req);
   if(!validationErrors.isEmpty()){
@@ -59,7 +59,13 @@ router.post('/', validateTweet, handleValidationErrors, asyncHandler(async(req, 
    const { message } = req.body
    const tweet = await Tweet.create({ message })
    res.status(201).json({ tweet })
-}))
+}));
+
+router.put('/:id(\\d+)', validateTweet, handleValidationErrors, asyncHandler(async (req, res) => {
+    const tweetId = parseInt(req.params.id);
+
+    if (tweetId)
+}));
 
 
 
